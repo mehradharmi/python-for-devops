@@ -3,6 +3,9 @@ this script is for backup from local to s3 bucket
 """
 
 import boto3
+import os
+import datetime
+import shutil
 
 
 def create_bucket(bucket_name, file_name, region):
@@ -20,12 +23,22 @@ def create_bucket(bucket_name, file_name, region):
     except Exception as e:
         print(f"Error occurred: {e}")
 
-    s3.upload_file(
+        today = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+
+        name, ext = os.path.splitext(file_name)
+
+        backup_file = os.path.join(name, f"backup-{today}{ext}")
+        print(f"Backup file is: {backup_file}")
+    try:
+
+        s3.upload_file(
             file_name,
             bucket_name,
-            file_name
+            backup_file
             )
-    print("File uploaded succesfully")
+        print(f"File {backup_file} uploaded successfully")
+    except Exception as e:
+        print(f"Error occurred during file upload: {e}")
 
 
 create_bucket("lindodium-backup-2026", "backup.py", "us-west-1")
