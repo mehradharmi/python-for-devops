@@ -7,14 +7,18 @@ import boto3
 
 def create_bucket(bucket_name, file_name, region):
     s3 = boto3.client("s3")
+    try:
 
-    s3.create_bucket(
+        s3.create_bucket(
             Bucket = bucket_name,
             CreateBucketConfiguration = {
                 "LocationConstraint": region
                 }
             )
-    print(f"Bucket: {bucket_name} created successfully")
+        print(f"Bucket: {bucket_name} created successfully")
+
+    except Exception as e:
+        print(f"Error occurred: {e}")
 
     s3.upload_file(
             file_name,
