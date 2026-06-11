@@ -3,6 +3,10 @@ import boto3
 def create_ec2_instance(ami_id, instance_type, key_name, security_group_id, instance_name, storage_size):
     ec2 = boto3.client("ec2")
     try:
+        with open("user_data.sh", "r") as file:
+            user_data = file.read()
+        print(user_data)
+
         ec2.run_instances(
             ImageId = ami_id,
             InstanceType = instance_type,
@@ -27,9 +31,11 @@ def create_ec2_instance(ami_id, instance_type, key_name, security_group_id, inst
                     "Ebs": {
                         "VolumeSize": storage_size,
                         "VolumeType": "gp3",
+                        "DeleteOnTermination": True
                     }
                 }
-            ]
+            ],
+            UserData = user_data
         )
         print("ec2 created successfully")
     except Exception as e:
