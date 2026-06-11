@@ -1,8 +1,16 @@
+from datetime import datetime
 import os
 import boto3
+import datetime
 
 def create_bucket(bucket_name, file_name, region):
     s3 = boto3.client("s3")
+    timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+
+    name, ext = os.path.splitext(file_name)
+    print(f"Name: {name}, Extension: {ext}")
+
+    backup_file = f"{name}-{timestamp}{ext}"
     try:
         s3.create_bucket(
             Bucket = bucket_name,
@@ -14,17 +22,14 @@ def create_bucket(bucket_name, file_name, region):
     except Exception as e:
         print("bucket may already exists")
 
-        backup_file_name = file_name + ".bak"
-        os.rename(file_name, backup_file_name)
-
         try:
             s3.upload_file(
-                backup_file_name,
+                file_name,
                 bucket_name,
-                file_name
+                backup_file
             )
-            print(f"{file_name} uploaded successfully to to {bucket_name}")
+            print(f"{backup_file} uploaded successfully to {bucket_name}")
         except Exception as e:
             print("Error in uploading")
 
-create_bucket("dharmi-lngodium", "s3_bucket.py", "us-west-1")
+create_bucket("dharmi-lngodium", "server_health_check.py", "us-west-1")
