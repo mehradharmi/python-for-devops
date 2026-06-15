@@ -1,0 +1,5 @@
+INFO Application Started
+INFO User Login
+ERROR Database Connection Failed
+INFO Request Received
+ERROR Redis Timeout
