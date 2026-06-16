@@ -6,17 +6,17 @@ response = {
         {"id":"i-104","state":"stopped"}
     ]
 }
-Running_server = []
-Stopped_server = []
+running_server = []
+stopped_server = []
 for instance in response["Instances"]:
     if instance["state"] == "running":
-        Running_server.append(instance["id"])
+        running_server.append(instance["id"])
     elif instance["state"] == "stopped":
-        Stopped_server.append(instance["id"])
+        stopped_server.append(instance["id"])
 print("Running Server:")
-for server in Running_server:
+for server in running_server:
     print(server)
 print("\n")
 print("Stopped Server:")
-for server in Stopped_server:
+for server in stopped_server:
     print(server)
